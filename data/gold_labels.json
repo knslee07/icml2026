@@ -1,0 +1,1162 @@
+{
+  "metadata": {
+    "description": "Gold label data for compensation consultant analysis",
+    "created_by": "txt_to_json_converter.py",
+    "summary": {
+      "total_entries": 143,
+      "companies": 83,
+      "year_range": {
+        "min": 2007,
+        "max": 2024
+      },
+      "ret_no_consultants": 34,
+      "surv_no_consultants": 125
+    }
+  },
+  "entries": [
+    {
+      "company": "AEMD",
+      "year": 2017,
+      "ret_consultants": "Barney & Barney",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 1
+    },
+    {
+      "company": "AKTX",
+      "year": 2024,
+      "ret_consultants": "Amplify Strategy & Consulting LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 2
+    },
+    {
+      "company": "AMPH",
+      "year": 2022,
+      "ret_consultants": "Willis Towers Watson",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 3
+    },
+    {
+      "company": "ANNX",
+      "year": 2023,
+      "ret_consultants": "Aon plc",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 4
+    },
+    {
+      "company": "AUID",
+      "year": 2018,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 5
+    },
+    {
+      "company": "AUID",
+      "year": 2024,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 6
+    },
+    {
+      "company": "AVK",
+      "year": 2007,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 7
+    },
+    {
+      "company": "AWF",
+      "year": 2015,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 8
+    },
+    {
+      "company": "AXSM",
+      "year": 2016,
+      "ret_consultants": "UNNAMED",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 9
+    },
+    {
+      "company": "AXSM",
+      "year": 2018,
+      "ret_consultants": "Frederick W. Cook & Co.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 10
+    },
+    {
+      "company": "AXSM",
+      "year": 2022,
+      "ret_consultants": "Frederic W. Cook & Co., Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 11
+    },
+    {
+      "company": "BNED",
+      "year": 2016,
+      "ret_consultants": "Mercer",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 12
+    },
+    {
+      "company": "BNED",
+      "year": 2021,
+      "ret_consultants": "Mercer",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 13
+    },
+    {
+      "company": "BNED",
+      "year": 2022,
+      "ret_consultants": "Mercer",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 14
+    },
+    {
+      "company": "CEE",
+      "year": 2013,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 15
+    },
+    {
+      "company": "CHWY",
+      "year": 2021,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 16
+    },
+    {
+      "company": "CHWY",
+      "year": 2024,
+      "ret_consultants": "Willis Towers Watson PLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 17
+    },
+    {
+      "company": "CMMB",
+      "year": 2021,
+      "ret_consultants": "Deloitte Israel & Co.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 18
+    },
+    {
+      "company": "CNTA",
+      "year": 2024,
+      "ret_consultants": "Aon plc",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 19
+    },
+    {
+      "company": "CSV",
+      "year": 2013,
+      "ret_consultants": "Mercer (US) Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 20
+    },
+    {
+      "company": "CSV",
+      "year": 2021,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 21
+    },
+    {
+      "company": "CVGI",
+      "year": 2010,
+      "ret_consultants": "Pearl Meyer & Partners",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 22
+    },
+    {
+      "company": "DAL",
+      "year": 2010,
+      "ret_consultants": "Frederic W. Cook & Co.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 23
+    },
+    {
+      "company": "DAL",
+      "year": 2016,
+      "ret_consultants": "Meridian Compensation Partners, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 24
+    },
+    {
+      "company": "DCI",
+      "year": 2009,
+      "ret_consultants": "Towers Perrin",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 25
+    },
+    {
+      "company": "DCI",
+      "year": 2017,
+      "ret_consultants": "Willis Towers Watson",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 26
+    },
+    {
+      "company": "DCI",
+      "year": 2021,
+      "ret_consultants": "Willis Towers Watson",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 27
+    },
+    {
+      "company": "DLHC",
+      "year": 2023,
+      "ret_consultants": "Korn Ferry International",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 28
+    },
+    {
+      "company": "DOV",
+      "year": 2007,
+      "ret_consultants": "Mercer Human Resource Consulting, Inc.",
+      "surv_consultants": "Hewitt Associates",
+      "source_file": "gold_label_new.txt",
+      "source_line": 29
+    },
+    {
+      "company": "DOV",
+      "year": 2009,
+      "ret_consultants": "Mercer; Mercer (US) Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 30
+    },
+    {
+      "company": "DUOL",
+      "year": 2024,
+      "ret_consultants": "Compensia Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 31
+    },
+    {
+      "company": "DXPE",
+      "year": 2011,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 32
+    },
+    {
+      "company": "FANG",
+      "year": 2014,
+      "ret_consultants": "Aon Hewitt",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 33
+    },
+    {
+      "company": "FARO",
+      "year": 2022,
+      "ret_consultants": "Compensia, Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 34
+    },
+    {
+      "company": "FARO",
+      "year": 2023,
+      "ret_consultants": "Compensia, Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 35
+    },
+    {
+      "company": "FCO",
+      "year": 2008,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 36
+    },
+    {
+      "company": "FI",
+      "year": 2016,
+      "ret_consultants": "Meridian Compensation Partners, LLC",
+      "surv_consultants": "Towers Watson",
+      "source_file": "gold_label_new.txt",
+      "source_line": 37
+    },
+    {
+      "company": "FI",
+      "year": 2017,
+      "ret_consultants": "Meridian Compensation Partners, LLC",
+      "surv_consultants": "Willis Towers Watson",
+      "source_file": "gold_label_new.txt",
+      "source_line": 38
+    },
+    {
+      "company": "FTFT",
+      "year": 2018,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 39
+    },
+    {
+      "company": "FTFT",
+      "year": 2023,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 40
+    },
+    {
+      "company": "HBB",
+      "year": 2023,
+      "ret_consultants": "Korn Ferry",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 41
+    },
+    {
+      "company": "HBB",
+      "year": 2024,
+      "ret_consultants": "Korn Ferry",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 42
+    },
+    {
+      "company": "HIW",
+      "year": 2015,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 43
+    },
+    {
+      "company": "HIW",
+      "year": 2017,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 44
+    },
+    {
+      "company": "HIW",
+      "year": 2024,
+      "ret_consultants": "Pearl Meyer",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 45
+    },
+    {
+      "company": "HOOK",
+      "year": 2024,
+      "ret_consultants": "Aon Radford",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 46
+    },
+    {
+      "company": "HRB",
+      "year": 2012,
+      "ret_consultants": "Frederic W. Cook & Co., Inc.",
+      "surv_consultants": "Aon Hewitt; Towers Watson",
+      "source_file": "gold_label_new.txt",
+      "source_line": 47
+    },
+    {
+      "company": "HRB",
+      "year": 2017,
+      "ret_consultants": "Frederic W. Cook & Co.",
+      "surv_consultants": "Aon Hewitt; Towers Watson",
+      "source_file": "gold_label_new.txt",
+      "source_line": 48
+    },
+    {
+      "company": "HRB",
+      "year": 2021,
+      "ret_consultants": "Compensation Advisory Partners LLC; UNNAMED",
+      "surv_consultants": "Aon Hewitt; Willis Towers Watson",
+      "source_file": "gold_label_new.txt",
+      "source_line": 49
+    },
+    {
+      "company": "ICHR",
+      "year": 2021,
+      "ret_consultants": "Radford",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 50
+    },
+    {
+      "company": "ICHR",
+      "year": 2022,
+      "ret_consultants": "Aon",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 51
+    },
+    {
+      "company": "IDXX",
+      "year": 2009,
+      "ret_consultants": "Frederic W. Cook & Co., Inc.; Towers Perrin; UNNAMED",
+      "surv_consultants": "Hewitt Associates; Radford",
+      "source_file": "gold_label_new.txt",
+      "source_line": 52
+    },
+    {
+      "company": "INN",
+      "year": 2016,
+      "ret_consultants": "FTI Consulting, Inc.; Frederic W. Cook & Co, Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 53
+    },
+    {
+      "company": "INTC",
+      "year": 2014,
+      "ret_consultants": "Farient Advisors LLC",
+      "surv_consultants": "Radford",
+      "source_file": "gold_label_new.txt",
+      "source_line": 54
+    },
+    {
+      "company": "INTC",
+      "year": 2016,
+      "ret_consultants": "Farient Advisors LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 55
+    },
+    {
+      "company": "IRON",
+      "year": 2023,
+      "ret_consultants": "Pearl Meyer & Partners, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 56
+    },
+    {
+      "company": "JBHT",
+      "year": 2013,
+      "ret_consultants": "Meridian Compensation Partners, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 57
+    },
+    {
+      "company": "JHG",
+      "year": 2022,
+      "ret_consultants": "McLagan AON",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 58
+    },
+    {
+      "company": "JHG",
+      "year": 2024,
+      "ret_consultants": "Meridian Compensation Partners",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 59
+    },
+    {
+      "company": "JPC",
+      "year": 2007,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 60
+    },
+    {
+      "company": "JPC",
+      "year": 2014,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 61
+    },
+    {
+      "company": "KD",
+      "year": 2022,
+      "ret_consultants": "Frederic W. Cook & Co.; Mercer LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 62
+    },
+    {
+      "company": "KD",
+      "year": 2023,
+      "ret_consultants": "Frederic W. Cook & Co.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 63
+    },
+    {
+      "company": "KPRX",
+      "year": 2019,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 64
+    },
+    {
+      "company": "KRO",
+      "year": 2010,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 65
+    },
+    {
+      "company": "KRO",
+      "year": 2021,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 66
+    },
+    {
+      "company": "LAW",
+      "year": 2023,
+      "ret_consultants": "Compensia, Inc",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 67
+    },
+    {
+      "company": "LILAK",
+      "year": 2018,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 68
+    },
+    {
+      "company": "LILAK",
+      "year": 2022,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 69
+    },
+    {
+      "company": "LKFN",
+      "year": 2009,
+      "ret_consultants": "Amalfi Consulting, Inc; Clark Consulting; Frederic W. Cook & Co., Inc.; The Delves Group",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 70
+    },
+    {
+      "company": "LKFN",
+      "year": 2016,
+      "ret_consultants": "Pearl Meyer & Partners",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 71
+    },
+    {
+      "company": "LKFN",
+      "year": 2022,
+      "ret_consultants": "Pearl Meyer & Partners",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 72
+    },
+    {
+      "company": "LLFLQ",
+      "year": 2018,
+      "ret_consultants": "Pearl Meyer",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 73
+    },
+    {
+      "company": "LLFLQ",
+      "year": 2021,
+      "ret_consultants": "Pearl Meyer",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 74
+    },
+    {
+      "company": "MCK",
+      "year": 2016,
+      "ret_consultants": "Semler Brossy Consulting Group, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 75
+    },
+    {
+      "company": "MKC",
+      "year": 2018,
+      "ret_consultants": "Exequity L.L.P.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 76
+    },
+    {
+      "company": "MKTX",
+      "year": 2009,
+      "ret_consultants": "Grahall Partners, LLC",
+      "surv_consultants": "CHiPS; McLagan Partners; Mercer; Pearl Meyer & Partners; Watson Wyatt",
+      "source_file": "gold_label_new.txt",
+      "source_line": 77
+    },
+    {
+      "company": "MKTX",
+      "year": 2024,
+      "ret_consultants": "Frederic W. Cook & Co., Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 78
+    },
+    {
+      "company": "MOD",
+      "year": 2022,
+      "ret_consultants": "Farient Advisors LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 79
+    },
+    {
+      "company": "MQT",
+      "year": 2008,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 80
+    },
+    {
+      "company": "MRIN",
+      "year": 2017,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 81
+    },
+    {
+      "company": "NDLS",
+      "year": 2019,
+      "ret_consultants": "FW Cook",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 82
+    },
+    {
+      "company": "NDLS",
+      "year": 2024,
+      "ret_consultants": "FW Cook",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 83
+    },
+    {
+      "company": "NOVT",
+      "year": 2012,
+      "ret_consultants": "Towers Watson",
+      "surv_consultants": "Mercer; Towers Perrin; Radford; Watson Wyatt",
+      "source_file": "gold_label_new.txt",
+      "source_line": 84
+    },
+    {
+      "company": "NOVT",
+      "year": 2023,
+      "ret_consultants": "Korn Ferry",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 85
+    },
+    {
+      "company": "NUVL",
+      "year": 2024,
+      "ret_consultants": "Aon Consulting, Inc. / Radford",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 86
+    },
+    {
+      "company": "NVAX",
+      "year": 2007,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 87
+    },
+    {
+      "company": "NVAX",
+      "year": 2016,
+      "ret_consultants": "LCG Group Compensation & HR Consulting",
+      "surv_consultants": "Radford",
+      "source_file": "gold_label_new.txt",
+      "source_line": 88
+    },
+    {
+      "company": "NVAX",
+      "year": 2018,
+      "ret_consultants": "Radford",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 89
+    },
+    {
+      "company": "NVAX",
+      "year": 2020,
+      "ret_consultants": "Radford",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 90
+    },
+    {
+      "company": "NVAX",
+      "year": 2023,
+      "ret_consultants": "Pearl Meyer & Partners, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 91
+    },
+    {
+      "company": "NVAX",
+      "year": 2024,
+      "ret_consultants": "Pearl Meyer & Partners, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 92
+    },
+    {
+      "company": "ODFL",
+      "year": 2008,
+      "ret_consultants": "Hay Group, Inc",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 93
+    },
+    {
+      "company": "ODFL",
+      "year": 2009,
+      "ret_consultants": "Hay Group, Inc",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 94
+    },
+    {
+      "company": "ODP",
+      "year": 2014,
+      "ret_consultants": "Frederic W. Cook & Co., Inc.; Hay Group; Towers Watson & Co.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 95
+    },
+    {
+      "company": "ODP",
+      "year": 2017,
+      "ret_consultants": "Frederic W. Cook & Co., Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 96
+    },
+    {
+      "company": "OIS",
+      "year": 2010,
+      "ret_consultants": "UNNAMED",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 97
+    },
+    {
+      "company": "ONVO",
+      "year": 2020,
+      "ret_consultants": "Arnosti Consulting",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 98
+    },
+    {
+      "company": "ONVO",
+      "year": 2021,
+      "ret_consultants": "Anderson Pay Advisors LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 99
+    },
+    {
+      "company": "OXBR",
+      "year": 2023,
+      "ret_consultants": "Zayla Partners, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 100
+    },
+    {
+      "company": "PCAR",
+      "year": 2011,
+      "ret_consultants": "Mercer",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 101
+    },
+    {
+      "company": "PGRE",
+      "year": 2019,
+      "ret_consultants": "FPL Associates L.P.; FW Cook",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 102
+    },
+    {
+      "company": "PGRE",
+      "year": 2021,
+      "ret_consultants": "FPL Associates L.P.; FW Cook",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 103
+    },
+    {
+      "company": "PGRE",
+      "year": 2023,
+      "ret_consultants": "Frederic W. Cook & Co., Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 104
+    },
+    {
+      "company": "PLCE",
+      "year": 2014,
+      "ret_consultants": "Semler Brossy Consulting Group, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 105
+    },
+    {
+      "company": "PLCE",
+      "year": 2017,
+      "ret_consultants": "Semler Brossy Consulting Group, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 106
+    },
+    {
+      "company": "PRI",
+      "year": 2011,
+      "ret_consultants": "James L. Reda & Associates LLC; Pearl Meyer & Partners; Towers Watson & Co.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 107
+    },
+    {
+      "company": "PRI",
+      "year": 2016,
+      "ret_consultants": "Pearl Meyer & Partners",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 108
+    },
+    {
+      "company": "PRI",
+      "year": 2020,
+      "ret_consultants": "Pearl Meyer & Partners",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 109
+    },
+    {
+      "company": "PRI",
+      "year": 2021,
+      "ret_consultants": "Pearl Meyer & Partners",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 110
+    },
+    {
+      "company": "RL",
+      "year": 2007,
+      "ret_consultants": "Exequity LLP; Hewitt Associates Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 111
+    },
+    {
+      "company": "RL",
+      "year": 2024,
+      "ret_consultants": "Compensation Advisory Partners, LLC; Korn Ferry",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 112
+    },
+    {
+      "company": "SABS",
+      "year": 2024,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 113
+    },
+    {
+      "company": "SCL",
+      "year": 2018,
+      "ret_consultants": "Exequity LLP",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 114
+    },
+    {
+      "company": "SILK",
+      "year": 2024,
+      "ret_consultants": "Compensia, Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 115
+    },
+    {
+      "company": "SLS",
+      "year": 2014,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "Equilar; Radford",
+      "source_file": "gold_label_new.txt",
+      "source_line": 116
+    },
+    {
+      "company": "SNOA",
+      "year": 2015,
+      "ret_consultants": "Radford Survey & Consulting",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 117
+    },
+    {
+      "company": "SNOA",
+      "year": 2016,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 118
+    },
+    {
+      "company": "TARS",
+      "year": 2022,
+      "ret_consultants": "Nancy Arnosti",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 119
+    },
+    {
+      "company": "TBBK",
+      "year": 2018,
+      "ret_consultants": "UNNAMED",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 120
+    },
+    {
+      "company": "TBBK",
+      "year": 2020,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "McLagan",
+      "source_file": "gold_label_new.txt",
+      "source_line": 121
+    },
+    {
+      "company": "TGLS",
+      "year": 2020,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 122
+    },
+    {
+      "company": "TGT",
+      "year": 2010,
+      "ret_consultants": "Semler Brossy Consulting Group, LLC",
+      "surv_consultants": "Hewitt Associates, LLC",
+      "source_file": "gold_label_new.txt",
+      "source_line": 123
+    },
+    {
+      "company": "TGT",
+      "year": 2011,
+      "ret_consultants": "Semler Brossy Consulting Group, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 124
+    },
+    {
+      "company": "TLF",
+      "year": 2008,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 125
+    },
+    {
+      "company": "TLF",
+      "year": 2011,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 126
+    },
+    {
+      "company": "TMP",
+      "year": 2008,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 127
+    },
+    {
+      "company": "TMP",
+      "year": 2015,
+      "ret_consultants": "Mosteller & Associates",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 128
+    },
+    {
+      "company": "TMP",
+      "year": 2016,
+      "ret_consultants": "Mosteller & Associates",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 129
+    },
+    {
+      "company": "TMP",
+      "year": 2018,
+      "ret_consultants": "Pearl Meyer",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 130
+    },
+    {
+      "company": "TMP",
+      "year": 2023,
+      "ret_consultants": "AON, Pearl Meyer and Partners, LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 131
+    },
+    {
+      "company": "TSHA",
+      "year": 2023,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 132
+    },
+    {
+      "company": "TWLO",
+      "year": 2021,
+      "ret_consultants": "Compensia, Inc.",
+      "surv_consultants": "Radford",
+      "source_file": "gold_label_new.txt",
+      "source_line": 133
+    },
+    {
+      "company": "VCEL",
+      "year": 2013,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 134
+    },
+    {
+      "company": "VCEL",
+      "year": 2023,
+      "ret_consultants": "Frederic W. Cook & Co., Inc.",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 135
+    },
+    {
+      "company": "WASH",
+      "year": 2014,
+      "ret_consultants": "Pearl Meyer & Partners",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 136
+    },
+    {
+      "company": "WASH",
+      "year": 2018,
+      "ret_consultants": "Meridian Compensation Partners, LLC",
+      "surv_consultants": "Pearl Meyer & Partners; McLagan",
+      "source_file": "gold_label_new.txt",
+      "source_line": 137
+    },
+    {
+      "company": "WASH",
+      "year": 2024,
+      "ret_consultants": "Meridian Compensation Partners, LLC",
+      "surv_consultants": "McLagan",
+      "source_file": "gold_label_new.txt",
+      "source_line": 138
+    },
+    {
+      "company": "WAT",
+      "year": 2013,
+      "ret_consultants": "Pearl Meyer & Partners",
+      "surv_consultants": "CHiPS; Hewitt",
+      "source_file": "gold_label_new.txt",
+      "source_line": 139
+    },
+    {
+      "company": "WMG",
+      "year": 2007,
+      "ret_consultants": "NO_CONSULTANTS",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 140
+    },
+    {
+      "company": "WMG",
+      "year": 2008,
+      "ret_consultants": "Hewitt Associates LLC",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 141
+    },
+    {
+      "company": "XENE",
+      "year": 2023,
+      "ret_consultants": "Aon Human Capital Solutions",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 142
+    },
+    {
+      "company": "XENE",
+      "year": 2024,
+      "ret_consultants": "Aon Human Capital Solutions",
+      "surv_consultants": "NO_CONSULTANTS",
+      "source_file": "gold_label_new.txt",
+      "source_line": 143
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# Domain-Specific IE Alignment
+# Python 3.10+ required
+
+# Core ML
+torch>=2.1.0
+transformers>=4.40.0
+datasets>=2.18.0
+accelerate>=0.28.0
+
+# Parameter-efficient fine-tuning
+peft>=0.10.0
+bitsandbytes>=0.43.0
+
+# Utilities
+chardet>=5.0.0
+tqdm>=4.65.0
+
+# Optional: for training monitoring
+# wandb>=0.16.0
