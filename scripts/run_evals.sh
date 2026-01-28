@@ -5,7 +5,7 @@
 set -e
 
 GOLD="data/gold_labels.json"
-EVAL_DATA="data/eval"
+EVAL_DATA="data/eval/evals"
 RESULTS_DIR="results"
 
 mkdir -p $RESULTS_DIR

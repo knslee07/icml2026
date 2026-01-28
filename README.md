@@ -47,10 +47,10 @@ pip install -r requirements.txt
 
 Key dependencies:
 - Python 3.10+
-- PyTorch 2.1+ with CUDA 12.1
-- transformers >= 4.40.0
-- peft >= 0.10.0
-- bitsandbytes >= 0.43.0
+- PyTorch 2.4.1 with CUDA
+- transformers 4.56.1 (not 5.x - causes OOM)
+- peft 0.18.0
+- bitsandbytes 0.48.2
 
 ## Hardware Requirements
 
@@ -81,17 +81,20 @@ huggingface-cli download cs-file-uploads/eval_data --repo-type dataset --local-d
 ### 2. Run Inference
 
 ```bash
+# Create results directory
+mkdir -p results
+
 # Domain-specific model
 python src/inference.py \
     --adapter ./adapters/domain_specific \
-    --data ./data/eval \
+    --data ./data/eval/evals \
     --output results/pred_domain.json \
     --instruction long
 
 # Base model (vanilla)
 python src/inference.py \
     --vanilla \
-    --data ./data/eval \
+    --data ./data/eval/evals \
     --output results/pred_vanilla.json
 ```
 
