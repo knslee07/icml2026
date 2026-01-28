@@ -61,44 +61,53 @@ Key dependencies:
 
 ## Quick Start
 
-### 1. Download Adapters and Data
-
-Download from Hugging Face Hub:
+### 1. Setup Environment
 
 ```bash
-# Install huggingface_hub if needed
-pip install huggingface_hub
+# Create conda environment
+conda create -n icml2026 python=3.10 -y
+conda activate icml2026
 
-# Download adapters
-huggingface-cli download cs-file-uploads/domain-specific-adapter --local-dir ./adapters/domain_specific
-huggingface-cli download cs-file-uploads/ie-ner-adapter --local-dir ./adapters/ie_ner
-huggingface-cli download cs-file-uploads/ie-balanced-adapter --local-dir ./adapters/ie_balanced
-
-# Download evaluation data
-huggingface-cli download cs-file-uploads/eval_data --repo-type dataset --local-dir ./data/eval
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-### 2. Run Inference
+### 2. Download Adapters and Data
 
 ```bash
-# Create results directory
+python -c "
+from huggingface_hub import snapshot_download
+
+# Download adapters
+snapshot_download('cs-file-uploads/domain-specific-adapter', local_dir='./adapters/domain_specific')
+snapshot_download('cs-file-uploads/ie-ner-adapter', local_dir='./adapters/ie_ner')
+snapshot_download('cs-file-uploads/ie-balanced-adapter', local_dir='./adapters/ie_balanced')
+
+# Download eval data
+snapshot_download('cs-file-uploads/eval_data', repo_type='dataset', local_dir='./data/eval')
+"
+```
+
+### 3. Run Inference
+
+```bash
 mkdir -p results
 
-# Domain-specific model
+# Domain-specific model (F1=94.0%)
 python src/inference.py \
     --adapter ./adapters/domain_specific \
     --data ./data/eval/evals \
     --output results/pred_domain.json \
     --instruction long
 
-# Base model (vanilla)
+# Base model (F1=69.1%)
 python src/inference.py \
     --vanilla \
     --data ./data/eval/evals \
     --output results/pred_vanilla.json
 ```
 
-### 3. Evaluate
+### 4. Evaluate
 
 ```bash
 python src/evaluate.py \
