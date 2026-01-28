@@ -21,6 +21,7 @@ USAGE:
 import os
 import re
 import json
+import ast
 import argparse
 import warnings
 from datetime import datetime
@@ -36,6 +37,7 @@ from peft import PeftModel
 # Suppress warnings
 warnings.filterwarnings("ignore")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 
 # =============================================================================
@@ -43,7 +45,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 # =============================================================================
 
 # Retrieval settings
-WINDOW_SIZE = 250          # Characters around keyword matches
+WINDOW_SIZE = 400          # Characters around keyword matches
 MAX_CHUNK_TOKENS = 4000    # Tokens per LLM call
 CHUNK_OVERLAP = 25         # Token overlap between chunks
 
@@ -53,14 +55,21 @@ PATTERNS_SPECIFIC = [
     "independent consult", "independent advis",
     "committee consult", "committee advis",
     "outside consult", "outside advis",
+    "proxy consult", "proxy advis",
     "external consult", "external advis",
+    "third-party consult", "third-party advis",
     "remuneration consult", "remuneration advis",
+    "benefit consult", "benefit advis",
+    "benefits consult", "benefits advis",
 ]
 
 PATTERNS_COMMITTEE = [
     "compensation committee", "benefits committee",
-    "remuneration committee", "HR Committee",
-    "human resources committee",
+    "benefit committee", "remuneration committee",
+    "HR Committee", "human resources committee",
+    "human resource committee", "HRC ",
+    "nominating committee", "nomination committee",
+    "governance committee",
 ]
 
 PATTERNS_GENERAL = [
@@ -73,47 +82,81 @@ ALL_PATTERNS = [PATTERNS_SPECIFIC, PATTERNS_COMMITTEE, PATTERNS_GENERAL]
 SHORT_INSTRUCTION = """You are a meticulous reader of proxy-statement excerpts.
 
 TASK: Identify two categories of compensation consultants:
-  1. RET: Consultants retained/engaged to advise on executive compensation.
-  2. SURV: Survey/data providers NOT explicitly retained as advisors.
+  1. RET: Consultants retained/engaged to advise on executive compensation (includes advisory, analysis, market studies, recommendations).
+  2. SURV: Survey/data providers NOT explicitly retained as advisors (includes proprietary surveys like Radford, Mercer, Towers Watson).
 
 RULES:
 - RET and SURV are mutually exclusive
 - If consultant replaced during the period, list ONLY the final consultant
-- Exclude: directors-only consultants, law firms, internal HR staff, public data sources
+- Exclude: directors-only consultants, law firms, internal HR staff, public data sources (Salary.com, BLS, proxy advisors)
 - If name undisclosed: 'UNNAMED'. If none found: 'NO_CONSULTANTS'
+
+INPUT: Excerpts separated by <<<EXCERPT_BREAK>>>. Treat as one document.
 
 OUTPUT FORMAT:
 {RET: 'Firm A', 'Firm B'}, {SURV: 'Firm C'}
-- Use longest name variant, alphabetical order, single quotes
+- Use longest name variant
+- Alphabetical order, single quotes
+
+TIMING: Filing year (shown at document start) OR prior year only. If consultant replaced, list only final consultant even if predecessor worked during this window.
 """
 
 LONG_INSTRUCTION = """You are a meticulous reader of proxy-statement excerpts.
 
 TASK: Identify two categories of compensation consultants:
   1. RET: Consultants retained/engaged by committee/management/Board to advise on executive compensation.
-     - Includes: advisory, analysis, design, market studies, recommendations, reviews.
+     - Includes: advisory, analysis, design, market studies, recommendations, reviews (even without recommendations), SERP/retirement benefits consultants.
+     - Engagement structure (retainer vs. case-by-case) does NOT matter.
   2. SURV: Survey/data providers for executive compensation NOT explicitly retained as advisors.
-     - Includes: proprietary surveys (Radford, Mercer, Towers Watson).
+     - Includes: proprietary surveys (Radford, Mercer, Towers Watson), data aggregators, HR/internal-accessed survey data (if USED for exec comp, label provider as SURV).
      - RET and SURV are mutually exclusive.
 
-CRITICAL RULES:
-- Consultant replacements: List ONLY FINAL consultant, NOT predecessor.
-- Director compensation only: Exclude (NO_CONSULTANTS)
-- Fee amounts: IRRELEVANT (RET if retained regardless of fee)
-- Internal employees: Exclude HR staff, executives
-- Law firms: Exclude legal advisors
+CRITICAL SPECIAL CASES:
+- Consultant replacements: List ONLY FINAL consultant, NOT predecessor. Watch for: 'going forward', 'transitioned to', 'selected as new', 'reevaluated', 'in connection with [event]'. List NOT exhaustive\u2014read for any replacement indication. Even if predecessor worked during temporal window, exclude if replaced.
 
-EXCLUSIONS (NO_CONSULTANTS for both):
-- Public websites: Salary.com, Glassdoor, Indeed, LinkedIn Salary
+- Director compensation only: Exclude (NO_CONSULTANTS for both RET/SURV)
+- UNNAMED: If retained but name undisclosed
+- Fee amounts: IRRELEVANT (RET if retained regardless of fee)
+- Internal teams/employees: Exclude HR staff, executives (CSO, CFO, CEO)
+- Subsidiaries: Exclude consultants engaged by subsidiaries
+- Law firms: Exclude legal advisors (Skadden, Wilson Sonsini, Sullivan & Cromwell, Wachtell Lipton)
+- Sub-consultants: Exclude pension actuaries
+- Peer companies: NOT SURV providers
+- Merger/acquisition: Only current company's post-merger consultants
+
+EXCLUSIONS - Public Data Sources (NO_CONSULTANTS for both RET/SURV):
+- Public websites: Salary.com, Payscale, Glassdoor, Indeed, LinkedIn Salary, Levels.fyi
+- Government: BLS, SEC filings
+- Database aggregators without consultant: Bloomberg, FactSet, ISS downloads
 - Proxy advisors: ISS, Glass Lewis
 - Research orgs: Conference Board, WorldAtWork, NACD
+- Direct sources: Peer proxy statements
+\u26a0\ufe0f Only include proprietary surveys from compensation consulting firms.
 
-OUTPUT FORMAT:
-{RET: 'Firm A', 'Firm B'}, {SURV: 'Firm C'}
-- Use longest name variant, alphabetical order, single quotes
-- If none found: 'NO_CONSULTANTS'. If name undisclosed: 'UNNAMED'
+OTHER RULES:
+- Survey products: firm name only ('Radford Survey' \u2192 'Radford')
+- Individual names: resolve to firm
+- Historical relationships: assume current if implied ('worked 15 years')
+- RFP (Request for Proposal) without selection: NO_CONSULTANTS
+- Data licensing without consultant: NO_CONSULTANTS
 
-TIMING: Filing year OR prior year only. If consultant replaced, list only final consultant.
+INPUT FORMAT:
+Excerpts separated by <<<EXCERPT_BREAK>>> or '=== LLM CHUNK k/n ==='. Treat as one document.
+
+OUTPUT RULES (CUSTOM FORMAT; NOT JSON):
+1. Return: {RET: 'Firm A', 'Firm B'}, {SURV: 'Firm C'}
+2. Multiple names: use LONGEST name
+3. Survey products: firm name only (Mercer Benchmark \u2192 Mercer)
+4. Alphabetical order, single quotes
+5. None found: 'NO_CONSULTANTS'. Name undisclosed: 'UNNAMED'
+
+TIMING RULES:
+- Temporal window: filing year OR prior year
+- Filing year: at document start (e.g., 'filed in 2023')
+- No year info: assume current unless indicated otherwise
+- Fiscal year: May differ from calendar (proxy filed 2024 for FY2023 may cover Apr 2023-Mar 2024). Filing/prior year typically coincides with fiscal year, but fiscal info may not be available.
+- CRITICAL: If consultant replaced, list ONLY final consultant even if predecessor worked during temporal window
+- Historical data: Consultants from BEFORE temporal window without current retention indication = NO_CONSULTANTS
 """
 
 
@@ -140,11 +183,34 @@ def read_file(file_path: str) -> str:
 
 
 def clean_text(text: str) -> str:
-    """Clean HTML entities and normalize whitespace."""
+    """Clean HTML entities and normalize whitespace (character-by-character)."""
     text = html.unescape(text)
-    text = re.sub(r'<[^>]+>', ' ', text)  # Remove HTML tags
-    text = re.sub(r'\s+', ' ', text)       # Normalize whitespace
-    return text.strip()
+    cleaned = []
+    in_tag = False
+    last_was_space = True
+
+    for char in text:
+        if char == '<':
+            in_tag = True
+            continue
+        elif char == '>':
+            in_tag = False
+            continue
+        elif in_tag:
+            continue
+
+        is_space = char.isspace()
+        if is_space:
+            if last_was_space:
+                continue
+            char = ' '
+            last_was_space = True
+        else:
+            last_was_space = False
+
+        cleaned.append(char)
+
+    return ''.join(cleaned)
 
 
 def extract_header_info(text: str) -> Dict:
@@ -170,22 +236,25 @@ def find_relevant_excerpts(text: str, window: int = WINDOW_SIZE) -> List[Dict]:
 
     Find text sections containing compensation consultant keywords.
     Uses hierarchical pattern matching (specific -> general).
+    Merging is done per pattern group to preserve group boundaries.
     """
     cleaned = clean_text(text)
-    excerpts = []
+    merged_excerpts = []
 
     for pattern_group in ALL_PATTERNS:
+        hits = []
         for pattern in pattern_group:
             for match in re.finditer(pattern, cleaned, re.IGNORECASE):
                 start = max(0, match.start() - window)
                 end = min(len(cleaned), match.end() + window)
-                excerpts.append({
+                hits.append({
                     'text': cleaned[start:end],
                     'position': start,
                     'pattern': pattern
                 })
+        merged_excerpts += merge_overlapping(hits)
 
-    return merge_overlapping(excerpts)
+    return merged_excerpts
 
 
 def merge_overlapping(excerpts: List[Dict]) -> List[Dict]:
@@ -194,19 +263,20 @@ def merge_overlapping(excerpts: List[Dict]) -> List[Dict]:
         return []
 
     sorted_exc = sorted(excerpts, key=lambda x: x['position'])
-    merged = [sorted_exc[0]]
+    merged = [sorted_exc[0].copy()]
 
     for exc in sorted_exc[1:]:
         last = merged[-1]
         last_end = last['position'] + len(last['text'])
 
         if exc['position'] <= last_end:
-            # Merge overlapping
             if exc['position'] + len(exc['text']) > last_end:
                 extension = exc['text'][last_end - exc['position']:]
                 last['text'] += extension
+            if exc['pattern'] != last['pattern']:
+                last['pattern'] = f"{last['pattern']}, {exc['pattern']}"
         else:
-            merged.append(exc)
+            merged.append(exc.copy())
 
     return merged
 
@@ -233,8 +303,114 @@ def create_chunks(text: str, tokenizer, max_tokens: int = MAX_CHUNK_TOKENS,
 # Extraction (Stage 2)
 # =============================================================================
 
+def _extract_names_with_quotes(raw: str) -> List[str]:
+    """Extract single-quoted names using state machine.
+
+    Handles possessives (Cook's) and edge cases.
+    """
+    names = []
+    in_quote = False
+    current_name = ""
+    i = 0
+
+    while i < len(raw):
+        char = raw[i]
+
+        if char == "'" and not in_quote:
+            in_quote = True
+            current_name = ""
+        elif char == "'" and in_quote:
+            if i + 1 < len(raw) and raw[i + 1] == 's':
+                current_name += char
+            else:
+                in_quote = False
+                if current_name.strip():
+                    names.append(current_name.strip())
+                current_name = ""
+        elif in_quote:
+            current_name += char
+
+        i += 1
+
+    return names
+
+
+def parse_llm_response(response: str, chunk_id: str = "") -> Dict[str, List[str]]:
+    """Parse LLM output into RET and SURV lists.
+
+    Multiple parsing paths for robustness:
+    - PATH 0: Python dict (ast.literal_eval)
+    - PATH 1: Strict regex {RET: ...}, {SURV: ...}
+    - PATH 2: Relaxed regex (same braces)
+    - PATH 2.5: Bracketed lists
+    - PATH 3: Fallback (one name per line)
+    """
+    # Clean response
+    stop_words = ["model", "ANSWER:", "<END>"]
+    for stop_word in stop_words:
+        if stop_word in response:
+            response = response.split(stop_word)[0].strip()
+            break
+    response = response.replace("<END>", "").strip()
+
+    # Handle code block format
+    code_match = re.search(r'```(?:python)?\s*(.*?)```', response, re.DOTALL)
+    if code_match:
+        response = code_match.group(1).strip()
+
+    # PATH 0: Try ast.literal_eval for Python dict
+    try:
+        parsed = ast.literal_eval(response.strip())
+        if isinstance(parsed, dict) and 'RET' in parsed and 'SURV' in parsed:
+            ret = parsed['RET'] if isinstance(parsed['RET'], list) else [parsed['RET']]
+            surv = parsed['SURV'] if isinstance(parsed['SURV'], list) else [parsed['SURV']]
+            ret = [r for r in ret if r and r != 'NO_CONSULTANTS']
+            surv = [s for s in surv if s and s != 'NO_CONSULTANTS']
+            return {"RET": sorted(set(ret)), "SURV": sorted(set(surv))}
+    except (ValueError, SyntaxError):
+        pass
+
+    # PATH 1: Strict regex {RET: ...}, {SURV: ...}
+    patterns = [
+        r"\{RET:\s*([^}]*)\},\s*\{SURV:\s*([^}]*)\}",
+        r"\{'RET':\s*([^}]*)\},\s*\{'SURV':\s*([^}]*)\}",
+        r'\{"RET":\s*([^}]*)\},\s*\{"SURV":\s*([^}]*)\}',
+    ]
+    for pattern in patterns:
+        m = re.search(pattern, response, re.I)
+        if m:
+            ret = _extract_names_with_quotes(m.group(1))
+            surv = _extract_names_with_quotes(m.group(2))
+            return {"RET": sorted(set(ret)), "SURV": sorted(set(surv))}
+
+    # PATH 2: Relaxed regex (same braces)
+    m2 = re.search(r"\{[^{}]*RET:\s*(.*?)\s*,?\s*SURV:\s*(.*?)\s*\}", response, flags=re.I | re.S)
+    if m2:
+        ret = _extract_names_with_quotes(m2.group(1))
+        surv = _extract_names_with_quotes(m2.group(2))
+        return {"RET": sorted(set(ret)), "SURV": sorted(set(surv))}
+
+    # PATH 2.5: Bracketed lists
+    lists_found = re.findall(r'\[(.*?)\]', response, re.S)
+    if lists_found:
+        all_names = []
+        for list_content in lists_found:
+            names = _extract_names_with_quotes(list_content)
+            all_names.extend(names)
+        if all_names:
+            return {"RET": sorted(set(all_names)), "SURV": []}
+
+    # PATH 3: Fallback - one name per line
+    allowed = re.compile(r"^[A-Za-z0-9&., '\\-]+$")
+    names = [ln.strip() for ln in response.splitlines()
+             if ln.strip() and allowed.match(ln) and not ln.startswith('<')]
+    return {"RET": sorted(set(names)), "SURV": []}
+
+
 def extract_from_chunk(text: str, model, tokenizer, filing_year: str = None,
-                       instruction: str = "long", raw_mode: bool = False) -> Dict[str, List[str]]:
+                       instruction: str = "long", chunk_id: str = "",
+                       raw_mode: bool = False,
+                       source_text: str = None) -> Dict[str, List[str]]:
     """
     Stage 2: LLM-based extraction.
 
@@ -250,13 +426,16 @@ def extract_from_chunk(text: str, model, tokenizer, filing_year: str = None,
     prompt_parts = [instr]
     if filing_year:
         prompt_parts.append(
-            f"\nTEMPORAL CONTEXT: This document was filed in {filing_year}. "
+            f"TEMPORAL CONTEXT: This document was filed in {filing_year}. "
             f"Consultants retained in {filing_year} or {int(filing_year)-1} are considered 'currently retained'.\n"
         )
-    prompt_parts.append(f"\nTEXT TO ANALYZE:\n{text}")
+    prompt_parts.append(f"TEXT TO ANALYZE: {text}")
     prompt_parts.append(
-        "\n\nAfter reading, output ONLY one line:\n"
+        "After reading the excerpts, output ONLY one line in this exact format:\n"
         "{RET: 'Firm A', 'Firm B'}, {SURV: 'Firm C'}\n"
+        "If no consultants appear anywhere, output exactly:\n"
+        "{RET: 'NO_CONSULTANTS'}, {SURV: 'NO_CONSULTANTS'}\n"
+        "Do not summarize or repeat the excerpts.\n"
         "BEGIN OUTPUT:\n"
     )
     prompt = "".join(prompt_parts)
@@ -271,58 +450,115 @@ def extract_from_chunk(text: str, model, tokenizer, filing_year: str = None,
             do_sample=False,
             eos_token_id=tokenizer.eos_token_id,
             pad_token_id=tokenizer.pad_token_id,
+            early_stopping=True,
         )
 
     response = tokenizer.decode(outputs[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True).strip()
 
     # Parse response
-    result = parse_llm_response(response)
+    result = parse_llm_response(response, chunk_id=chunk_id)
 
-    # Validate (skip for raw/vanilla mode)
+    # Validate against source text (skip for raw/vanilla mode)
+    validation_text = source_text if source_text else text
     if not raw_mode:
-        result = validate_against_text(result, text)
+        result = validate_against_text(result, validation_text)
 
     return result
-
-
-def parse_llm_response(response: str) -> Dict[str, List[str]]:
-    """Parse LLM output into RET and SURV lists."""
-    # Try strict format: {RET: ...}, {SURV: ...}
-    pattern = r"\{RET:\s*([^}]*)\},\s*\{SURV:\s*([^}]*)\}"
-    match = re.search(pattern, response, re.I)
-
-    if match:
-        ret = extract_quoted_names(match.group(1))
-        surv = extract_quoted_names(match.group(2))
-        return {'RET': sorted(set(ret)), 'SURV': sorted(set(surv))}
-
-    # Fallback: return empty
-    return {'RET': [], 'SURV': []}
-
-
-def extract_quoted_names(text: str) -> List[str]:
-    """Extract single-quoted names from text."""
-    names = []
-    in_quote = False
-    current = ""
-
-    for char in text:
-        if char == "'" and not in_quote:
-            in_quote = True
-            current = ""
-        elif char == "'" and in_quote:
-            in_quote = False
-            if current.strip() and current.strip().upper() != "NO_CONSULTANTS":
-                names.append(current.strip())
-        elif in_quote:
-            current += char
-
-    return names
 
 
 # =============================================================================
 # Post-Processing (Stage 3)
 # =============================================================================
+
+def find_firm_in_text(firm: str, text: str) -> str:
+    """Validate that a consultant name appears in the source text.
+
+    Uses word-by-word sequence matching with gap tolerance.
+    Returns the matched name from text, or None if not found.
+    """
+    firm_lower = firm.lower()
+
+    # Tokenize firm name preserving & and .
+    firm_words = []
+    current_word = ""
+    for char in firm_lower:
+        if char.isalnum() or char in ['&', '.']:
+            current_word += char
+        else:
+            if current_word:
+                firm_words.append(current_word)
+                current_word = ""
+    if current_word:
+        firm_words.append(current_word)
+
+    # Filter short words
+    firm_words = [w for w in firm_words if len(w) > 1 or (len(w) == 1 and w.isalpha()) or '.' in w]
+
+    if not firm_words:
+        return None
+
+    # Find all positions of each word in text
+    text_lower = text.lower()
+    word_positions = []
+    for word in firm_words:
+        positions = []
+        start = 0
+        while True:
+            pos = text_lower.find(word, start)
+            if pos == -1:
+                break
+            positions.append(pos)
+            start = pos + 1
+        if not positions:
+            return None
+        word_positions.append(positions)
+
+    if not word_positions or not word_positions[0]:
+        return None
+
+    # Find words appearing in sequence with max gap
+    max_gap = 5  # Max words between consecutive firm words
+
+    for first_pos in word_positions[0]:
+        current_pos = first_pos
+        found_sequence = [current_pos]
+
+        success = True
+        for next_word_positions in word_positions[1:]:
+            valid_next_pos = None
+            for pos in next_word_positions:
+                if 0 < pos - current_pos < max_gap * 15:
+                    valid_next_pos = pos
+                    break
+
+            if valid_next_pos is None:
+                success = False
+                break
+
+            found_sequence.append(valid_next_pos)
+            current_pos = valid_next_pos
+
+        if not success:
+            continue
+
+        if len(found_sequence) == len(firm_words):
+            start_pos = found_sequence[0]
+            end_pos = found_sequence[-1] + len(firm_words[-1])
+
+            # Expand boundaries
+            while start_pos > 0 and (text[start_pos-1].isalnum() or
+                                     text[start_pos-1] in '&., '):
+                start_pos -= 1
+            while end_pos < len(text) and (text[end_pos].isalnum() or
+                                           text[end_pos] in '&., '):
+                end_pos += 1
+
+            company_name = text[start_pos:end_pos].strip()
+            if all(word in company_name.lower() for word in firm_words):
+                return company_name.strip(' ,():;')
+
+    return None
+
 
 def validate_against_text(result: Dict[str, List[str]], source_text: str) -> Dict[str, List[str]]:
     """
@@ -331,76 +567,138 @@ def validate_against_text(result: Dict[str, List[str]], source_text: str) -> Dic
     Reject hallucinations - names that don't appear in the source.
     """
     validated = {'RET': [], 'SURV': []}
-    source_lower = source_text.lower()
+    special_values = {'UNNAMED', 'NO_CONSULTANTS'}
 
     for category in ['RET', 'SURV']:
         for name in result.get(category, []):
-            if name.upper() in ['UNNAMED', 'NO_CONSULTANTS']:
+            if name.upper() in special_values:
                 validated[category].append(name)
-            elif find_name_in_text(name, source_lower):
+            elif find_firm_in_text(name, source_text):
                 validated[category].append(name)
 
     return validated
 
 
-def find_name_in_text(name: str, text_lower: str) -> bool:
-    """Check if a consultant name appears in text."""
-    # Tokenize name
-    words = re.findall(r'[a-z0-9&.]+', name.lower())
-    words = [w for w in words if len(w) > 1 or w in ['&', '.']]
-
-    if not words:
-        return False
-
-    # Check all words appear
-    return all(w in text_lower for w in words)
-
-
-def normalize_names(names: Set[str]) -> Set[str]:
-    """
-    Stage 3b: Normalize consultant names.
-
-    Merge abbreviations with full names (e.g., "FW Cook" -> "Frederic W. Cook & Co.").
-    """
+def _build_canonical_map(names: set) -> dict:
+    """Build a mapping from abbreviations to their canonical (longest) names."""
     if len(names) <= 1:
-        return names
+        return {}
 
+    canonical_map = {}
     names_list = list(names)
-    to_remove = set()
 
-    for short in names_list:
-        for long in names_list:
-            if short == long or len(short) >= len(long):
+    for i, short in enumerate(names_list):
+        for j, long in enumerate(names_list):
+            if i == j:
                 continue
-            if is_abbreviation(short, long):
-                to_remove.add(short)
+            if len(short) >= len(long):
+                continue
+
+            if _is_abbreviation_of(short, long):
+                canonical_map[short] = long
                 break
 
-    return names - to_remove
+    return canonical_map
 
 
-def is_abbreviation(short: str, long: str) -> bool:
+def _is_abbreviation_of(short: str, long: str) -> bool:
     """Check if short name is an abbreviation of long name."""
-    short_lower = short.lower()
-    long_lower = long.lower()
+    short_lower = short.lower().strip()
+    long_lower = long.lower().strip()
 
-    # Substring match
+    # Case 0: Typo/spacing variants
+    def normalize_spacing(s):
+        s = re.sub(r'\s*&\s*', ' & ', s)
+        s = re.sub(r'\s*,\s*', ', ', s)
+        s = re.sub(r'\s+', ' ', s)
+        return s.strip()
+
+    if normalize_spacing(short_lower) == normalize_spacing(long_lower):
+        return True
+
+    # Case 1: Substring
     if short_lower in long_lower:
         return True
 
-    # Alphanumeric match
-    short_alpha = re.sub(r'[^a-z0-9]', '', short_lower)
-    long_alpha = re.sub(r'[^a-z0-9]', '', long_lower)
-    if short_alpha == long_alpha:
+    # Case 2: Alphanumeric substring
+    short_clean = re.sub(r'[^a-z0-9\s]', '', short_lower)
+    long_clean = re.sub(r'[^a-z0-9\s]', '', long_lower)
+    if short_clean and short_clean in long_clean:
+        return True
+
+    # Case 2b: Full alphanumeric match
+    short_alphanum = re.sub(r'[^a-z0-9]', '', short_lower)
+    long_alphanum = re.sub(r'[^a-z0-9]', '', long_lower)
+    if short_alphanum == long_alphanum:
+        return True
+
+    # Case 3: Known aliases
+    KNOWN_ALIASES = {
+        'frederic w. cook': ['fwc', 'f.w.c', 'fw.c', 'fw cook', 'f.w. cook', 'cook & co', 'fred cook', 'frederick cook'],
+        'pearl meyer': ['pm&p', 'pmp', 'pearl meyer & partners', 'pearl, meyer & partners'],
+        'towers watson': ['tw', 'towers'],
+        'willis towers watson': ['wtw', 'willis tw'],
+        'hewitt associates': ['hewitt'],
+        'aon hewitt': ['aon'],
+        'compensia': ['compensia inc'],
+        'pay governance': ['pay governance llc', 'pg'],
+        'semler brossy': ['semler brossy consulting group', 'sbcg'],
+        'meridian compensation partners': ['meridian', 'meridian cp', 'mcp'],
+        'exequity': ['exequity llp'],
+        'farient advisors': ['farient'],
+        'mercer': ['mercer consulting', 'mercer human resource'],
+        'radford': ['aon radford'],
+        'mclagan': ['aon mclagan'],
+        'korn ferry': ['korn ferry hay group', 'hay group', 'hay'],
+        'buck consultants': ['buck'],
+        'compensation advisory partners': ['cap'],
+        'lyons benenson': ['lyons, benenson'],
+    }
+
+    for canonical, aliases in KNOWN_ALIASES.items():
+        if canonical in long_lower:
+            if short_lower in aliases or any(alias in short_lower for alias in aliases):
+                return True
+
+    # Case 4: Initials match
+    long_words = re.findall(r'[A-Za-z]+', long)
+    long_initials_all = ''.join(w[0].upper() for w in long_words)
+    short_letters = re.sub(r'[^A-Za-z]', '', short).upper()
+
+    if len(short_letters) >= 2 and long_initials_all.startswith(short_letters):
+        return True
+
+    # Case 4b: Initials excluding common suffixes
+    suffix_words = {'co', 'inc', 'llc', 'llp', 'corp', 'ltd', 'group', 'partners', 'consulting', 'advisors', 'associates'}
+    long_initials_no_suffix = ''.join(w[0].upper() for w in long_words if w.lower() not in suffix_words)
+    if len(short_letters) >= 2 and short_letters == long_initials_no_suffix:
+        return True
+
+    # Case 5: First word match
+    long_first_word = long_words[0].lower() if long_words else ''
+    short_first_word = re.findall(r'[A-Za-z]+', short_lower)
+    if short_first_word and short_first_word[0] == long_first_word and len(short) < len(long) / 2:
         return True
 
     return False
 
 
+# Blacklist patterns for non-consultant sources
 BLACKLIST_PATTERNS = [
-    'conference board', 'worldatwork', 'nacd', 'salary.com', 'glassdoor',
-    'indeed', 'linkedin', 'payscale', 'bureau of labor', 'iss', 'glass lewis',
-    'bloomberg', 'factset', 'magazine', 'journal', 'association',
+    # Industry/professional associations
+    'bankers association', 'bar association', 'medical association',
+    'hospital association', 'insurance association', 'credit union',
+    'chamber of commerce',
+    # Trade publications
+    'magazine', 'journal', 'director magazine', 'bank director',
+    # Public data sources
+    'conference board', 'worldatwork', 'nacd',
+    'salary.com', 'glassdoor', 'indeed', 'linkedin', 'levels.fyi', 'payscale',
+    'bureau of labor', 'bls',
+    # Proxy advisors
+    'iss', 'glass lewis',
+    # Database aggregators
+    'bloomberg', 'factset',
 ]
 
 
@@ -425,7 +723,7 @@ def aggregate_chunks(chunk_results: List[Dict[str, List[str]]],
 
     Combines extractions from multiple chunks, handling:
     - Deduplication
-    - Name normalization
+    - Name normalization (canonical mapping)
     - RET/SURV mutual exclusivity
     """
     ret_set = set()
@@ -445,11 +743,11 @@ def aggregate_chunks(chunk_results: List[Dict[str, List[str]]],
     if len(surv_set) > 1 and 'UNNAMED' in surv_set:
         surv_set.discard('UNNAMED')
 
-    # Normalize names
+    # Build canonical name map and apply to both sets
     all_names = ret_set | surv_set
-    normalized = normalize_names(all_names)
-    ret_set = ret_set & normalized
-    surv_set = surv_set & normalized
+    canonical_map = _build_canonical_map(all_names)
+    ret_set = {canonical_map.get(name, name) for name in ret_set}
+    surv_set = {canonical_map.get(name, name) for name in surv_set}
 
     if raw_mode:
         return {
@@ -494,17 +792,20 @@ def process_document(file_path: str, model, tokenizer,
             'survey_consultants': ['NO_CONSULTANTS'],
         }
 
-    combined = "\n\n<<<EXCERPT_BREAK>>>\n\n".join(e['text'] for e in excerpts)
+    BREAK = "\n\n<<<EXCERPT_BREAK>>>\n\n"
+    combined = BREAK.join(e['text'] for e in excerpts)
     chunks = create_chunks(combined, tokenizer)
 
     # Stage 2-3: Extract from each chunk
     chunk_results = []
-    for chunk in chunks:
+    for idx, chunk in enumerate(chunks, 1):
         result = extract_from_chunk(
             chunk, model, tokenizer,
             filing_year=filing_year,
             instruction=instruction,
-            raw_mode=raw_mode
+            chunk_id=f"{idx}/{len(chunks)}",
+            raw_mode=raw_mode,
+            source_text=chunk,
         )
         chunk_results.append(result)
 
